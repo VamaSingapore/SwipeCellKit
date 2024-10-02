@@ -45,12 +45,14 @@ class SwipeController: NSObject {
     lazy var panGestureRecognizer: UIPanGestureRecognizer = {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(gesture:)))
         gesture.delegate = self
+        gesture.name = "SwipeCellKit.SwipeController.PanGesture"
         return gesture
     }()
     
     lazy var tapGestureRecognizer: UITapGestureRecognizer = {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(gesture:)))
         gesture.delegate = self
+        gesture.name = "SwipeCellKit.SwipeController.TapGesture"
         return gesture
     }()
     
