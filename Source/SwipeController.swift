@@ -367,6 +367,11 @@ extension SwipeController: UIGestureRecognizerDelegate {
         
         return true
     }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let gesture = gestureRecognizer as? UIPanGestureRecognizer, let view = gestureRecognizer.view as? SwipeCollectionViewCell, view.state != .center else { return true }
+        return false
+    }
 }
 
 extension SwipeController: SwipeActionsViewDelegate {
