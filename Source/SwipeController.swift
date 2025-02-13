@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 protocol SwipeControllerDelegate: class {
-    
     func swipeController(_ controller: SwipeController, canBeginEditingSwipeableFor orientation: SwipeActionsOrientation) -> Bool
     
     func swipeController(_ controller: SwipeController, editActionsForSwipeableFor orientation: SwipeActionsOrientation) -> [SwipeAction]?
@@ -24,6 +23,7 @@ protocol SwipeControllerDelegate: class {
     
     func swipeController(_ controller: SwipeController, visibleRectFor scrollView: UIScrollView) -> CGRect?
     
+    func swipeController(_ controller: SwipeController, shouldRequireFailureForGestureRecognizer gestureRecognizer: UIGestureRecognizer) -> Bool
 }
 
 class SwipeController: NSObject {
@@ -59,7 +59,6 @@ class SwipeController: NSObject {
     init(swipeable: UIView & Swipeable, actionsContainerView: UIView) {
         self.swipeable = swipeable
         self.actionsContainerView = actionsContainerView
-        
         super.init()
         
         configure()
@@ -371,8 +370,13 @@ extension SwipeController: UIGestureRecognizerDelegate {
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard let gesture = gestureRecognizer as? UIPanGestureRecognizer, let view = gestureRecognizer.view as? SwipeCollectionViewCell, view.state != .center else { return true }
+        if delegate?.swipeController(self, shouldRequireFailureForGestureRecognizer: otherGestureRecognizer) ?? false {
+            if let view = gestureRecognizer.view as? SwipeCollectionViewCell {
+                return view.state == .center
+            }
+        }
         return false
+        
     }
 }
 
