@@ -208,6 +208,11 @@ open class SwipeCollectionViewCell: UICollectionViewCell {
 }
 
 extension SwipeCollectionViewCell: SwipeControllerDelegate {
+    func swipeController(_ controller: SwipeController, shouldRequireFailureForGestureRecognizer gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let collectionView else { return false }
+        return delegate?.collectionView(collectionView, shouldRequireFailureForGestureRecognizer: gestureRecognizer) ?? false
+    }
+    
     func swipeController(_ controller: SwipeController, canBeginEditingSwipeableFor orientation: SwipeActionsOrientation) -> Bool {
         return true
     }
